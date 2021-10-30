@@ -75,7 +75,7 @@ const handleRequest = (folder: string) =>
 
 interface Server {
   abort: () => void;
-  run: () => Promise<void>;
+  promise: Promise<void>;
 }
 
 export function serve(folder = "./", port = 8080) {
@@ -86,19 +86,17 @@ export function serve(folder = "./", port = 8080) {
 
   const controller = new AbortController();
   const signal = controller.signal;
-
+  console.info(
+    `Serving folder ${yellow(absoluteFolderPath)}`,
+    "at",
+    underline(blue(`http://localhost:${port}`)),
+  );
   const server: Server = {
     abort: () => controller.abort(),
-    run: () => {
-      console.info(
-        `Serving folder ${yellow(absoluteFolderPath)}`,
-        "at",
-        underline(blue(`http://localhost:${port}`)),
-      );
-      return listenAndServe(":" + port, handleRequest(folder), {
-        signal,
-      });
-    },
+
+    promise: listenAndServe(":" + port, handleRequest(folder), {
+      signal,
+    }),
   };
 
   return server;
@@ -106,5 +104,5 @@ export function serve(folder = "./", port = 8080) {
 
 if (import.meta.main) {
   const port = Number(Deno.args?.[1]) || undefined;
-  await serve(Deno.args?.[0], port).run();
+  await serve(Deno.args?.[0], port).promise;
 }

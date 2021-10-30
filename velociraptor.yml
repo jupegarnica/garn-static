@@ -61,7 +61,7 @@ scripts:
 
   test:
     desc: Runs the tests
-    cmd: deno test
+    cmd: deno test --allow-net --allow-read --allow-run
     # cmd: deno test --reload
     gitHook: pre-push
 
