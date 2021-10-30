@@ -83,25 +83,28 @@ export function serve(folder = "./", port = 8080) {
     parse(import.meta.url).dir,
     folder,
   );
-  console.info(
-    `Serving folder ${yellow(absoluteFolderPath)}`,
-    "at",
-    underline(blue(`http://localhost:${port}`)),
-  );
-  var controller = new AbortController();
-  var signal = controller.signal;
+
+  const controller = new AbortController();
+  const signal = controller.signal;
 
   const server: Server = {
     abort: () => controller.abort(),
-    run: () =>
-      listenAndServe(":" + port, handleRequest(folder), {
+    run: () => {
+      console.info(
+        `Serving folder ${yellow(absoluteFolderPath)}`,
+        "at",
+        underline(blue(`http://localhost:${port}`)),
+      );
+      return listenAndServe(":" + port, handleRequest(folder), {
         signal,
-      }),
+      });
+    },
   };
 
   return server;
 }
 
 if (import.meta.main) {
-  await (serve(Deno.args?.[0], Number(Deno.args?.[1])).run());
+  const port = Number(Deno.args?.[1]) || undefined;
+  await serve(Deno.args?.[0], port).run();
 }

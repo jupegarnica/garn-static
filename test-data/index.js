@@ -13,7 +13,7 @@ const editor = document.getElementById("editor");
 const comment = document.getElementById("comment");
 const output = document.getElementById("output");
 const context = output.getContext("2d");
-const dpr = window.devicePixelRatio || 1;
+const dpr = globalThis.devicePixelRatio || 1;
 const defaultTextColor = "#f24";
 
 let callback = function () {};
@@ -69,7 +69,7 @@ function updateCallback() {
       }
     `,
     );
-  } catch (error) {
+  } catch (_) {
     callback = null;
   }
 }
@@ -110,7 +110,7 @@ function render() {
   }
 
   if (!callback) {
-    window.requestAnimationFrame(render);
+    globalThis.requestAnimationFrame(render);
     return;
   }
 
@@ -173,7 +173,9 @@ function render() {
             bgColor,
           );
           contrastedColor = bgColor.textColor();
-        } catch (_) {}
+        } catch (_) {
+          // console.log(_);
+        }
         document.documentElement.style.setProperty(
           "--text-color",
           distance < 70 ? "#000" : defaultTextColor,
@@ -192,7 +194,7 @@ function render() {
     }
   }
 
-  window.requestAnimationFrame(render);
+  globalThis.requestAnimationFrame(render);
 }
 
 render();
@@ -246,7 +248,7 @@ function nextExample() {
 
 output.addEventListener("click", nextExample);
 
-window.onpopstate = function () {
+globalThis.onpopstate = function () {
   readURL();
   updateCallback();
 };
