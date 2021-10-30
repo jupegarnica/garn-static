@@ -1,13 +1,13 @@
-const favicon = document.getElementById('favicon');
-const canvas = document.createElement('canvas');
-const context = canvas.getContext('2d');
+const favicon = document.getElementById("favicon");
+const canvas = document.createElement("canvas");
+const context = canvas.getContext("2d");
 
-let callback = function () { };
+let callback = function () {};
 let startTime = null;
-let code = '';
+let code = "";
 
 if (document.location.hash <= 1) {
-  document.location.hash = 'Math.sin(y/8+t)';
+  document.location.hash = "Math.sin(y/8+t)";
 }
 
 function updateCallback() {
@@ -18,7 +18,12 @@ function updateCallback() {
   startTime = null;
 
   try {
-    callback = new Function('t', 'i', 'x', 'y', `
+    callback = new Function(
+      "t",
+      "i",
+      "x",
+      "y",
+      `
       try {
         with (Math) {
           return ${code};
@@ -26,13 +31,14 @@ function updateCallback() {
       } catch (error) {
         return error;
       }
-    `);
+    `,
+    );
   } catch (error) {
     callback = null;
   }
 }
 
-window.addEventListener('hashchange', updateCallback, false);
+window.addEventListener("hashchange", updateCallback, false);
 updateCallback();
 
 function render() {
@@ -51,14 +57,14 @@ function render() {
 
   canvas.width = 16;
   canvas.height = 16;
-  context.fillStyle = '#000000';
+  context.fillStyle = "#000000";
   context.fillRect(0, 0, 16, 16);
 
   let index = 0;
   for (let y = 0; y < 16; y++) {
     for (let x = 0; x < 16; x++) {
       let value = Number(callback(time, index, x, y));
-      let color = value > 0 ? '#FFF' : '#F24';
+      let color = value > 0 ? "#FFF" : "#F24";
       value = Math.abs(-value);
       value = Math.min(1, value);
       value = Math.max(0, value);
@@ -69,7 +75,7 @@ function render() {
     }
   }
 
-  favicon.setAttribute('href', canvas.toDataURL());
+  favicon.setAttribute("href", canvas.toDataURL());
   window.requestAnimationFrame(render);
 }
 

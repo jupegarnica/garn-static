@@ -1,20 +1,20 @@
-import examples from './examples.json.js';
+import examples from "./examples.json.js";
 
-import { chooseColor } from './colors.js';
+import { chooseColor } from "./colors.js";
 
-import * as chroma from 'https://deno.land/x/chroma@v1.0.10/index.ts';
+import * as chroma from "https://deno.land/x/chroma@v1.0.10/index.ts";
 
 const count = 16;
 const size = 16;
 const spacing = 1;
 const width = count * (size + spacing) - spacing;
-const input = document.getElementById('input');
-const editor = document.getElementById('editor');
-const comment = document.getElementById('comment');
-const output = document.getElementById('output');
-const context = output.getContext('2d');
+const input = document.getElementById("input");
+const editor = document.getElementById("editor");
+const comment = document.getElementById("comment");
+const output = document.getElementById("output");
+const context = output.getContext("2d");
 const dpr = window.devicePixelRatio || 1;
-const defaultTextColor = '#f24';
+const defaultTextColor = "#f24";
 
 let callback = function () {};
 let startTime = null;
@@ -25,7 +25,6 @@ let code = `[
   'white'
 ]`;
 
-
 // let code ="[\n16+x-y-t,\n'black',\ni,\n`linear-gradient(${sin(t/3)*360}deg, rgba(131,58,180,1) 0%, rgba(253,29,29,1) 50%, rgba(252,176,69,1) 100%)`,\n ]";
 
 output.width = output.height = width * dpr;
@@ -35,16 +34,16 @@ output.style.width = output.style.height = `${width}px`;
 function readURL() {
   const url = new URL(document.location);
 
-  input.value = url.searchParams.get('code') || code;
+  input.value = url.searchParams.get("code") || code;
 }
 
 readURL();
 
 function checkLength() {
   if (code.length > 32) {
-    editor.classList.add('over-limit');
+    editor.classList.add("over-limit");
   } else {
-    editor.classList.remove('over-limit');
+    editor.classList.remove("over-limit");
   }
 }
 
@@ -56,10 +55,10 @@ function updateCallback() {
 
   try {
     callback = new Function(
-      't',
-      'i',
-      'x',
-      'y',
+      "t",
+      "i",
+      "x",
+      "y",
       `
       try {
         with (Math) {
@@ -75,28 +74,28 @@ function updateCallback() {
   }
 }
 
-input.addEventListener('input', updateCallback);
+input.addEventListener("input", updateCallback);
 updateCallback();
 
-input.addEventListener('focus', function () {
-  editor.classList.add('focus');
+input.addEventListener("focus", function () {
+  editor.classList.add("focus");
   updateComments([
     'hit "enter" to save in URL',
     'or get <a href="https://twitter.com/aemkei/status/1323399877611708416">more info here</a>',
   ]);
 });
 
-input.addEventListener('blur', function () {
+input.addEventListener("blur", function () {
   updateCommentsForCode();
-  editor.classList.remove('focus');
+  editor.classList.remove("focus");
 });
 
-input.addEventListener('keyup', (event) => {
+input.addEventListener("keyup", (event) => {
   event.preventDefault();
-  if (!event.shiftKey && event.key === 'Enter') {
+  if (!event.shiftKey && event.key === "Enter") {
     const url = new URL(document.location);
     const param = code.trim();
-    url.searchParams.set('code', param);
+    url.searchParams.set("code", param);
     history.replaceState(null, param, url);
   }
 });
@@ -124,9 +123,9 @@ function render() {
       const isArray = Array.isArray(returned);
       let value;
 
-      let positiveColor = '#fff';
+      let positiveColor = "#fff";
       let negativeColor = defaultTextColor;
-      let backgroundColor = '#000';
+      let backgroundColor = "#000";
       if (isArray) {
         [
           value,
@@ -149,8 +148,7 @@ function render() {
       if (radius > size / 2) {
         radius = size / 2;
       }
-      const fillStyle =
-        typeof color == 'string' ? color : chooseColor(color);
+      const fillStyle = typeof color == "string" ? color : chooseColor(color);
       context.beginPath();
       context.fillStyle = fillStyle;
       context.arc(
@@ -163,11 +161,10 @@ function render() {
       context.fill();
 
       if (index === 0) {
-        const background =
-          typeof backgroundColor == 'string'
-            ? backgroundColor
-            : chooseColor(backgroundColor);
-        let contrastedColor = '#fff';
+        const background = typeof backgroundColor == "string"
+          ? backgroundColor
+          : chooseColor(backgroundColor);
+        let contrastedColor = "#fff";
         let distance = 60;
         try {
           const bgColor = chroma.color(background);
@@ -176,19 +173,18 @@ function render() {
             bgColor,
           );
           contrastedColor = bgColor.textColor();
-
         } catch (_) {}
         document.documentElement.style.setProperty(
-          '--text-color',
-          distance < 70 ? '#000' : defaultTextColor,
+          "--text-color",
+          distance < 70 ? "#000" : defaultTextColor,
         );
         document.documentElement.style.setProperty(
-          '--input-color',
+          "--input-color",
           contrastedColor,
         );
 
         document.documentElement.style.setProperty(
-          '--background',
+          "--background",
           background,
         );
       }
@@ -202,10 +198,10 @@ function render() {
 render();
 
 function updateComments(comments) {
-  const lines = comment.querySelectorAll('label');
+  const lines = comment.querySelectorAll("label");
 
   if (comments.length === 1) {
-    lines[0].innerHTML = '&nbsp;';
+    lines[0].innerHTML = "&nbsp;";
     lines[1].innerHTML = `// ${comments[0]}`;
   } else {
     lines[0].innerHTML = `// ${comments[0]}`;
@@ -225,7 +221,7 @@ function updateCommentsForCode() {
     return;
   }
 
-  const newComments = newComment.split('\n');
+  const newComments = newComment.split("\n");
 
   updateComments(newComments);
 }
@@ -248,7 +244,7 @@ function nextExample() {
   updateCallback();
 }
 
-output.addEventListener('click', nextExample);
+output.addEventListener("click", nextExample);
 
 window.onpopstate = function () {
   readURL();

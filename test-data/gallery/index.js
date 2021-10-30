@@ -1,25 +1,25 @@
-const output = document.getElementById('output');
+const output = document.getElementById("output");
 const count = 16;
 const size = 16;
 const spacing = 1;
 const width = count * (size + spacing) - spacing;
 
-function render(callback, time, context){
+function render(callback, time, context) {
   let index = 0;
 
-  context.fillStyle = '#000';
+  context.fillStyle = "#000";
   context.fillRect(0, 0, width, width);
 
   for (let y = 0; y < count; y++) {
     for (let x = 0; x < count; x++) {
       const value = Number(callback(time, index, x, y));
       const offset = size / 2;
-      let color = '#FFF';
+      let color = "#FFF";
       let radius = (value * size) / 2;
 
       if (radius < 0) {
         radius = -radius;
-        color = '#F24';
+        color = "#F24";
       }
 
       if (radius > size / 2) {
@@ -33,7 +33,7 @@ function render(callback, time, context){
         y * (size + spacing) + offset,
         radius,
         0,
-        2 * Math.PI
+        2 * Math.PI,
       );
       context.fill();
       index++;
@@ -41,36 +41,40 @@ function render(callback, time, context){
   }
 }
 
-fetch('./snippets.txt')
-  .then(response => response.text())
-  .then(text => {
+fetch("./snippets.txt")
+  .then((response) => response.text())
+  .then((text) => {
+    const lines = text.split("\n")
+      .filter((line) => line !== "")
+      .filter((line) => line.indexOf("//"));
 
-    const lines = text.split('\n')
-      .filter(line => line !== '')
-      .filter(line => line.indexOf('//'));
+    lines.forEach((code) => {
+      const link = document.createElement("a");
+      const canvas = document.createElement("canvas");
+      const context = canvas.getContext("2d");
 
-    lines.forEach(code => {
-      const link = document.createElement('a');
-      const canvas = document.createElement('canvas');
-      const context = canvas.getContext('2d');
-
-      const url = new URL('/tixy', document.location);
-      url.searchParams.set('code', code);
+      const url = new URL("/tixy", document.location);
+      url.searchParams.set("code", code);
 
       link.appendChild(canvas);
-      link.classList.add('canvas');
-      link.setAttribute('href', url);
-
+      link.classList.add("canvas");
+      link.setAttribute("href", url);
 
       output.appendChild(link);
       canvas.width = width;
       canvas.height = width;
 
-      const callback  = new Function('t', 'i', 'x', 'y', `
+      const callback = new Function(
+        "t",
+        "i",
+        "x",
+        "y",
+        `
         with (Math) {
           return ${code};
         }
-      `);
+      `,
+      );
 
       const defaultTime = 0;
 
@@ -102,9 +106,8 @@ fetch('./snippets.txt')
 
       loop();
 
-      function start(){
-
-        if (active) {
+      function start() {
+        if (active) {
           return;
         }
 
@@ -114,12 +117,11 @@ fetch('./snippets.txt')
         }
 
         active = true;
-        canvas.classList.add('active');
+        canvas.classList.add("active");
       }
 
-      function stop(){
-
-        if (!active){
+      function stop() {
+        if (!active) {
           return;
         }
 
@@ -127,18 +129,18 @@ fetch('./snippets.txt')
         // startTime = null;
         pausesStart = new Date();
         // render(callback, defaultTime, context);
-        canvas.classList.remove('active');
+        canvas.classList.remove("active");
       }
-
 
       // canvas.addEventListener('mouseover', start);
       // canvas.addEventListener('mouseout', stop);
 
       let ticking = false;
 
-      function inView(){
+      function inView() {
         const rect = link.getBoundingClientRect();
-        const height = window.innerHeight || document.documentElement.clientHeight;
+        const height = window.innerHeight ||
+          document.documentElement.clientHeight;
         if (rect.top >= 0 && rect.bottom <= height) {
           start();
         } else {
@@ -146,9 +148,9 @@ fetch('./snippets.txt')
         }
       }
 
-      document.addEventListener('scroll', function(e) {
+      document.addEventListener("scroll", function (e) {
         if (!ticking) {
-          window.requestAnimationFrame(function() {
+          window.requestAnimationFrame(function () {
             inView();
             ticking = false;
           });
@@ -158,6 +160,5 @@ fetch('./snippets.txt')
       });
 
       inView();
-
     });
   });
