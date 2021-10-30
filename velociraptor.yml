@@ -76,7 +76,7 @@ scripts:
     cmd:
       - vr lint
       - vr fmt --check
-      - vr test
+      # - vr test
 
   commitlint:
     # cmd: echo --- ${GIT_ARGS} ---
