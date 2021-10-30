@@ -71,7 +71,14 @@ const handleRequest = (folder: string) =>
     return response;
   };
 
-export async function main(folder = "./", port = 8080) {
+// type Server = Promise<void> & { abort?: () => void };
+
+interface Server {
+  abort: () => void;
+  run: () => Promise<void>;
+}
+
+export function serve(folder = "./", port = 8080) {
   const absoluteFolderPath = join(
     parse(import.meta.url).dir,
     folder,
@@ -81,8 +88,20 @@ export async function main(folder = "./", port = 8080) {
     "at",
     underline(blue(`http://localhost:${port}`)),
   );
-  await listenAndServe(":" + port, handleRequest(folder));
+  var controller = new AbortController();
+  var signal = controller.signal;
+
+  const server: Server = {
+    abort: () => controller.abort(),
+    run: () =>
+      listenAndServe(":" + port, handleRequest(folder), {
+        signal,
+      }),
+  };
+
+  return server;
 }
+
 if (import.meta.main) {
-  await main(Deno.args?.[0]);
+  await (serve(Deno.args?.[0], Number(Deno.args?.[1])).run());
 }
