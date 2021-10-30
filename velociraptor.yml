@@ -9,17 +9,15 @@
 
 scripts:
   main:
-    desc: Runs main script
-    cmd: main.ts
+    desc: Start server
+    cmd: deno run --allow-net --allow-read main.ts
 
-  server:
-    desc: Starts deploy server
-    cmd: deno run  --watch server.ts
-    # cmd: deployctl run  --watch server.ts
+  dev:
+    desc: Start watch server
+    cmd: deno run  --watch main.ts
     allow:
       - read
       - net
-      - env
 
   docs:
     - echo "visit https://doc.deno.land/builtin/stable"
@@ -63,7 +61,8 @@ scripts:
 
   test:
     desc: Runs the tests
-    cmd: deno test --reload
+    cmd: deno test
+    # cmd: deno test --reload
     gitHook: pre-push
 
   cov:
