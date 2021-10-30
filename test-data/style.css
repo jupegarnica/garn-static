@@ -1,0 +1,111 @@
+:root {
+  --input-color: #fff;
+  --text-color: #f24;
+}
+
+html {
+  background-color: #000;
+  height: 100%;
+}
+body {
+  background: var(--background);
+  color: var(--input-color);
+}
+
+* {
+  box-sizing: border-box;
+}
+a:link,
+a:visited {
+  color: var(--text-color);
+}
+*,
+html,
+input {
+  font-family: monospace;
+  font-size: 14px;
+}
+body {
+  align-items: center;
+  display: grid;
+  height: 100%;
+  justify-items: center;
+  margin: 0;
+  padding: 0;
+}
+#editor,
+#output,
+input,
+label {
+  display: block;
+}
+#comment {
+  margin-bottom: 1em;
+}
+#editor {
+  line-height: 1.15em;
+  width: 271px;
+  /* background-color: #0006;
+  padding: 5px; */
+  /* --text-shadow: 1px 1px 3px black; */
+  /* text-shadow: var(--text-shadow); */
+}
+#editor #input {
+  background: none;
+  /* text-shadow: var(--text-shadow); */
+  border: 0;
+  color: var(--input-color);
+  margin: 0.15em 0;
+  padding: 0;
+  /* padding-left: 1em; */
+  width: 100%;
+}
+#editor #input:focus {
+  outline: none;
+}
+#editor label.limit-warning {
+  display: none;
+}
+#editor #comment {
+  color: var(--text-color);
+}
+#editor.over-limit #input {
+  /* background: #f24; */
+  color: var(--input-color);
+}
+#editor.over-limit.focus label.limit-warning {
+  display: block;
+}
+#code-runner,
+#editor.over-limit.focus label.second {
+  display: none;
+}
+::-webkit-scrollbar {
+  width: 2px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--input-color);
+}
+::-webkit-scrollbar-thumb:hover {
+  width: 10px;
+}
+
+footer {
+  opacity: 0.5;
+  padding: 0 1em;
+  color: var(--input-color);
+
+}
+footer a {
+  color: var(--input-color)!important;
+}
+.links {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5em;
+  /* color: #aaa; */
+}
