@@ -22,7 +22,6 @@ const handleRequest = (folder: string) =>
         },
       });
     } catch (error) {
-
       try {
         if (!ext) {
           ext = ".html";
@@ -39,7 +38,7 @@ const handleRequest = (folder: string) =>
           },
         });
       } catch (error) {
-        console.error(red('ERROR') ,dim(error?.message));
+        console.error(red("ERROR"), dim(error?.message));
         status = 404;
         response = new Response(
           `<html>
