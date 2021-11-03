@@ -17,13 +17,11 @@ Deno.test({
   },
 });
 
-
-
 Deno.test({
   name: "must work with args",
   // only:true,
   fn: async () => {
-    const server = serve('test-data', 2345);
+    const server = serve("test-data", 2345);
     const body = await fetch("http://localhost:2345/hello").then((
       r,
     ) => r.text());
@@ -74,11 +72,12 @@ Deno.test({
   name: "install must work",
   // only: true,
   fn: async () => {
-    const cmdInstall = "deno install --allow-net --allow-read -fn static ./main.ts"
-      .split(
-        " ",
-      );
-    const process = Deno.run({ cmd: cmdInstall })
+    const cmdInstall =
+      "deno install --allow-net --allow-read -fn static ./main.ts"
+        .split(
+          " ",
+        );
+    const process = Deno.run({ cmd: cmdInstall });
     await process.status();
     await process.close();
 
@@ -94,6 +93,5 @@ Deno.test({
     assertEquals(body, "hola mundo");
     await p.close();
     // await delay(1000);
-
   },
 });
