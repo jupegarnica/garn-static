@@ -4,7 +4,8 @@ import { fromFileUrl, join, parse } from "./deps.ts";
 import { blue, dim, green, red, underline, white, yellow } from "./deps.ts";
 import { MEDIA_TYPES } from "./media-types.ts";
 
-const info = (...args: string[]) => console.log(...['| ',...args,' |'].map(yellow));
+const info = (...args: string[]) =>
+  console.log(...["| ", ...args, " |"].map(yellow));
 const handleRequest = (folder: string) =>
   async function (request: Request): Promise<Response> {
     const { pathname } = new URL(request.url);
@@ -87,17 +88,17 @@ export function serve(folder = "./", port = 8080) {
     folder,
   ));
   const url = `http://localhost:${port}`;
-  const infoLength = Math.max(absoluteFolderPath.length, url.length)
-  const fixedLength = (t:string, char=' ') => t.padEnd(infoLength ,char)
-  const border = fixedLength('','-')
-  console.log('\n');
+  const infoLength = Math.max(absoluteFolderPath.length, url.length);
+  const fixedLength = (t: string, char = " ") => t.padEnd(infoLength, char);
+  const border = fixedLength("", "-");
+  console.log("\n");
   info(border);
   info(fixedLength("serving folder:"));
   info(fixedLength(absoluteFolderPath));
   info(fixedLength("at:"));
   info(blue(fixedLength(url)));
   info(border);
-  console.log('\n');
+  console.log("\n");
 
   const server: Server = {
     abort: () => controller.abort(),
