@@ -1,7 +1,7 @@
 import { listenAndServe } from "./deps.ts";
-import { fromFileUrl, join, parse } from "./deps.ts";
+import { join, parse } from "./deps.ts";
 
-import { blue, dim, green, red, underline, white, yellow } from "./deps.ts";
+import { blue, dim, green, red, white, yellow } from "./deps.ts";
 import { MEDIA_TYPES } from "./media-types.ts";
 
 const info = (...args: string[]) =>
