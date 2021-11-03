@@ -82,9 +82,9 @@ export function serve(folder = "./", port = 8080) {
   const controller = new AbortController();
   const signal = controller.signal;
   const absoluteFolderPath = join(
-    (Deno.cwd()),
+    Deno.cwd(),
     folder,
-  )
+  );
   const url = `http://localhost:${port}`;
   const infoLength = Math.max(absoluteFolderPath.length, url.length);
   const fixedLength = (t: string, char = " ") => t.padEnd(infoLength, char);
