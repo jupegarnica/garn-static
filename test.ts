@@ -13,7 +13,7 @@ Deno.test({
     assertEquals(body, "hola mundo");
     await server.abort();
     await server.promise;
-    await delay(5);
+    await delay(10);
   },
 });
 
@@ -28,7 +28,7 @@ Deno.test({
     assertEquals(body, "hola mundo");
     await server.abort();
     await server.promise;
-    await delay(5);
+    await delay(10);
   },
 });
 
@@ -36,13 +36,13 @@ Deno.test({
   name: "cli must work",
   // only: true,
   fn: async () => {
-    const cmd = "deno run --allow-net --allow-read ./main.ts test-data 12345"
+    const cmd = "deno run --allow-net --allow-read ./main.ts test-data 9876"
       .split(
         " ",
       );
     const p = Deno.run({ cmd });
-    await delay(100);
-    const body = await fetch("http://localhost:12345/hello").then((
+    await delay(1000);
+    const body = await fetch("http://localhost:9876/hello").then((
       r,
     ) => r.text());
     assertEquals(body, "hola mundo");
@@ -59,7 +59,7 @@ Deno.test({
         " ",
       );
     const p = Deno.run({ cmd });
-    await delay(100);
+    await delay(1000);
     const body = await fetch("http://localhost:8080/test-data/hello").then((
       r,
     ) => r.text());
@@ -86,12 +86,12 @@ Deno.test({
         " ",
       );
     const p = await Deno.run({ cmd });
-    await delay(100);
+    await delay(1000);
     const body = await fetch("http://localhost:3456/hello").then((
       r,
     ) => r.text());
     assertEquals(body, "hola mundo");
     await p.close();
-    // await delay(1000);
+
   },
 });
