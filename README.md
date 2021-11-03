@@ -1,24 +1,47 @@
-# deno-dev-template
+# garn-static
 
-[![ci](https://github.com/kawarimidoll/deno-dev-template/workflows/ci/badge.svg)](.github/workflows/ci.yml)
-[![deno.land](https://img.shields.io/badge/deno-%5E1.13.0-green?logo=deno)](https://deno.land)
-[![vr scripts](https://badges.velociraptor.run/flat.svg)](https://velociraptor.run)
-[![LICENSE](https://img.shields.io/badge/license-MIT-brightgreen)](LICENSE)
+Super simple server for static files that works in deno deploy
 
-my deno template
 
-## Setup
+## Usage
 
-Need to install [Velociraptor](https://velociraptor.run/).
 
-Confirm there is `~/.deno/bin` in `$PATH` to use the scripts installed by
-`deno install`.
+As code:
+
+```ts
+import  {serve} from  "https://deno.land/x/static/main.ts"
+
+// default serving folder . at port 8080
+const server = serve();
+
+// serving folder ./dist at port 1234
+const server = serve('./dist', 1234);
+
+// await until completion
+await server.promise;
+
+// or to close the server
+await server.abort();
 
 ```
-$ # install velociraptor
-$ deno install -qAn vr https://deno.land/x/velociraptor/cli.ts
-$ # install hook
-$ vr
+
+
+As installed script:
+
+```bash
+deno install --allow-net --allow-read -fn static https://deno.land/x/static/main.ts
+
+static dist 80
+
+# or with default args
+static
+
 ```
 
-The scripts are defined in [velociraptor.yml](velociraptor.yml).
+
+Run remotely
+
+```bash
+deno run --allow-net --allow-read  https://deno.land/x/static/main.ts  dist 8081
+
+```
