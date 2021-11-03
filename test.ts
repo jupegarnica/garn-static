@@ -1,13 +1,20 @@
 import { serve } from "./main.ts";
 import { assertEquals } from "https://deno.land/std/testing/asserts.ts";
 import { delay } from "https://deno.land/std/async/mod.ts";
-Deno.test("must work", async () => {
-  const server = serve();
-  const body = await fetch("http://localhost:8080/test-data/hello").then((r) =>
-    r.text()
-  );
-  assertEquals(body, "hola mundo");
-  server.abort();
+
+Deno.test({
+  name: "must work",
+  // only:true,
+  fn: async () => {
+    const server = serve();
+    const body = await fetch("http://localhost:8080/test-data/hello").then((
+      r,
+    ) => r.text());
+    assertEquals(body, "hola mundo");
+    await server.abort();
+    await server.promise;
+    await delay(5);
+  },
 });
 
 Deno.test({
@@ -19,7 +26,7 @@ Deno.test({
         " ",
       );
     const p = Deno.run({ cmd });
-    await delay(1000);
+    await delay(100);
     const body = await fetch("http://localhost:12345/hello").then((
       r,
     ) => r.text());
