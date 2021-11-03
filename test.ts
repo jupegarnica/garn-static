@@ -92,6 +92,5 @@ Deno.test({
     ) => r.text());
     assertEquals(body, "hola mundo");
     await p.close();
-
   },
 });
